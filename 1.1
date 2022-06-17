@@ -1,0 +1,93 @@
+using System;
+
+Dictionary<string, List<string>> baskets = new();
+
+
+
+bool exitRequested = false;
+while (!exitRequested)
+{
+    const string header = "Fresco trolley and basket Program";
+    Console.WriteLine(new string(' ', Math.Max(Console.WindowWidth / 2 - (header.Length / 2), 0)) + header);
+    Console.WriteLine();
+    Console.WriteLine(new string('-', Console.WindowWidth));
+    Console.WriteLine();
+    Console.WriteLine("Which action would you like to perform:");
+    Console.WriteLine("Press 1 to add basket");
+    Console.WriteLine("Press 2 to assign person to basket");
+    Console.WriteLine("Press 3 to unassign person from basket");
+    Console.WriteLine("Press 4 to print basket assignments");
+    Console.WriteLine("Press 5 To exit");
+    Console.WriteLine();
+    switch (Console.ReadKey(true).Key)
+    {
+        case ConsoleKey.D1: AddBasket(); break;
+        case ConsoleKey.D2: AssignBasket(); break;
+        case ConsoleKey.D3: UnassignBasket(); break;
+        case ConsoleKey.D4: PrintBaskets(); break;
+        case ConsoleKey.D5: Console.WriteLine("You Chose To EXIT"); exitRequested = true; break;
+        default: Console.WriteLine("Invalid Input. Try Again."); break;
+    }
+}
+
+void AddBasket()
+{
+    if (baskets.Count >= 8)
+    {
+        Console.WriteLine("You already have 8 baskets. Baskets are full.");
+    }
+    else
+    {
+        Console.Write("Enter basket name: ");
+        string basketName = Console.ReadLine()!;
+        if (baskets.ContainsKey(basketName))
+        {
+            Console.Write("Basket already exists. :(");
+        }
+        else
+        {
+            baskets.Add(basketName, new());
+            Console.Write("Basket was added. :)");
+        }
+    }
+}
+
+void AssignBasket()
+{
+    Console.Write("Enter basket name: ");
+    string basketName = Console.ReadLine()!;
+    Console.Write("Enter employee name: ");
+    string employeeName = Console.ReadLine()!;
+    if (!baskets.ContainsKey(basketName))
+    {
+        Console.Write("Basket not found. :(");
+    }
+    else
+    {
+        baskets[basketName].Add(employeeName);
+        Console.Write("Basket was assigned. :)");
+    }
+}
+
+void UnassignBasket()
+{
+    Console.Write("Enter basket name: ");
+    string basketName = Console.ReadLine()!;
+    Console.Write("Enter employee name: ");
+    string employeeName = Console.ReadLine()!;
+    baskets[basketName].Remove(employeeName);
+    Console.Write("Basket was unassigned. :)");
+}
+
+void PrintBaskets()
+{
+    Console.WriteLine("All baskets:");
+    foreach (var basket in baskets)
+    {
+        Console.WriteLine(basket.Key);
+        foreach (var employee in basket.Value)
+        {
+            Console.WriteLine("  " + employee);
+        }
+    }
+}
